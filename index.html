@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Little Surprise ♡</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100vh;
+      position: relative;
+      z-index: 2;
+    }
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<img src="https://drive.google.com/uc?export=view&id=1QY1X2XhTvC2iskExVbJZdIufmTPyVu-8">
+
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let particles = [];
+
+function firework(x, y) {
+  for (let i = 0; i < 70; i++) {
+    let a = Math.random() * Math.PI * 2;
+    let s = Math.random() * 5 + 2;
+    particles.push({
+      x, y,
+      vx: Math.cos(a) * s,
+      vy: Math.sin(a) * s,
+      life: 80
+    });
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles.forEach((p, i) => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.04;
+    p.life--;
+
+    ctx.fillStyle = "rgba(255,210,150," + p.life / 80 + ")";
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (p.life <= 0) particles.splice(i, 1);
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+setTimeout(() => firework(innerWidth * .2, innerHeight * .25), 300);
+setTimeout(() => firework(innerWidth * .8, innerHeight * .3), 900);
+setTimeout(() => firework(innerWidth * .25, innerHeight * .7), 1500);
+setTimeout(() => firework(innerWidth * .75, innerHeight * .7), 2100);
+</script>
+
+</body>
+</html>
